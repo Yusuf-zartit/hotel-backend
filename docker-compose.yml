@@ -1,0 +1,11 @@
+version: '3.1'
+services:
+  hotel-db:
+    image: postgres:15.2-alpine
+    restart: no
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=hotel_db
+    ports:
+      - '5432:5432'
