@@ -20,6 +20,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Room {
 
+    public static final String ENTITY_NAME = "Room";
+
     @Id
     @GeneratedValue
     private UUID id;
