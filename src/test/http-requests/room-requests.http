@@ -1,0 +1,64 @@
+### Create Room
+POST {{baseUrl}}/api/v1/rooms
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="request"; filename="room.json"
+Content-Type: application/json
+
+{
+  "roomType": "Single bed room",
+  "price": 100
+}
+--WebAppBoundary--
+
+> {%
+    client.test("Status code is 201 Created", function () {
+        client.assert(response.status === 201,  "HTTP response code is 201");
+        client.global.set("roomId", response.body.id);
+    });
+%}
+
+### Get after created
+GET {{baseUrl}}/api/v1/rooms/{{roomId}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+        let data = response.body;
+
+        client.assert(data.roomType === "Single bed room", "Rooms roomType is wrong");
+        client.assert(data.roomPrice === 100, "Rooms price is wrong");
+    });
+%}
+
+### Update Room
+PUT {{baseUrl}}/api/v1/rooms/{{roomId}}
+Content-Type: application/json
+
+{
+  "roomType": "Double bed room",
+  "price": 50
+}
+
+### Get after updated
+GET {{baseUrl}}/api/v1/rooms/{{roomId}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+        let data = response.body;
+
+        client.assert(data.roomType === "Double bed room", "Rooms roomType is wrong");
+        client.assert(data.roomPrice === 50, "Rooms price is wrong");
+    });
+%}
+
+### Delete Room
+DELETE {{baseUrl}}/api/v1/rooms/{{roomId}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 204, "Response status is not 204");
+    });
+%}
